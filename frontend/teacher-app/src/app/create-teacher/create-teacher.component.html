@@ -1,0 +1,6 @@
+<h2>Add New Teacher</h2>
+<form (submit)="addTeacher()">
+  <label>Name: <input type="text" [(ngModel)]="name" name ="name" required></label><br>
+  <label>Age: <input type="number" [(ngModel)]="age" name = "age" required></label><br>
+  <button type="submit">Add Teacher</button>
+</form>

@@ -1,0 +1,8 @@
+<h2>Teacher List</h2>
+<ul>
+    <li *ngFor = "let teacher of teachers">
+        {{teacher.name}} -{{teacher.age}} years old
+        <button (click)= "deleteTeacher(teacher.id)">Delete </button>
+    </li>
+</ul>
+<app-create-teacher (teacherCreated) ="onTeacherCreated()"> </app-create-teacher>
