@@ -19,6 +19,8 @@ addTeacher():void{
   if(this.age &&  this.name){
     this.teacherService.createTeacher({name:this.name, age:this.age}).subscribe(()=>{
       this.teacherCreated.emit();
+      this.name = ''
+      this.age = null;
 
     })
   }

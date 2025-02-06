@@ -16,7 +16,7 @@ def teacher_list(request):
 def create_teacher(request):
     form = TeacherForm(request.data)
     if form.is_valid():
-        teacher = form.save()
+        form.save()
         return Response({'status': 'Teacher created successfully'}, status=201)
     else:
         return Response(form.errors, status=400)
@@ -29,3 +29,15 @@ def delete_teacher(request, teacher_id):
         return Response({'status': 'Teacher deleted successfully'})
     except Teacher.DoesNotExist:
         return(Response({'status':'Teacher not found'}))
+    
+@api_view(["PUT"])
+def edit_teacher(request, teacher_id):
+    try:
+        teacher = Teacher.objects.get(id = teacher_id)
+    except Teacher.DoesNotExist:
+        return(Response({'status':'Teacher not found'}))
+    form = TeacherForm(request.data, instance=teacher) #updates with instance the teacher instead of creating new teacher
+    if form.is_valid():
+        form.save()
+        return Response({'status': 'Teacher updated successfully'})
+    

@@ -1,0 +1,7 @@
+<h2>Edit Teacher</h2>
+<form (submit)="saveChanges(); $event.preventDefault()">
+  <label>Name: <input type="text" [(ngModel)]="teacher.name" name ="name" required></label><br>
+  <label>Age: <input type="number" [(ngModel)]="teacher.age" name = "age" required></label><br>
+  <button type="submit">Save</button>
+  <button type = "button" (click)="closeEditor.emit()" >Cancel</button>
+</form>
