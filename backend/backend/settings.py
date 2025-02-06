@@ -90,17 +90,16 @@ DATABASES = {
     }
 }
 REST_FRAMEWORK = {
-    # Allowing unauthenticated access to all views
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ],
-    # Remove the authentication class for JWT (or keep as a fallback)
+    #'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.AllowAny',
+    #],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # Remove the JWT authentication class
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 # SIMPLE_JWT = {
 #     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
 #     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),

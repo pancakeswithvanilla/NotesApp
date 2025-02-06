@@ -6,10 +6,17 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth import authenticate
 
 def teacher_list(request):
     teachers = Teacher.objects.all().values()
     return JsonResponse(list(teachers), safe = False)
+
+def test_auth(request):
+    user = authenticate(username="ana", password="ana")
+    if user:
+        return JsonResponse({"status": "Authenticated"})
+    return JsonResponse({"status": "Failed"}, status=401)
 
 @csrf_exempt
 @api_view(['POST'])

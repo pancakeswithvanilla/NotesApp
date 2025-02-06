@@ -1,0 +1,17 @@
+<h1>Teachers Page</h1>
+
+<app-teachers-list 
+  [teachers]="teachers" 
+  (editTeacher)="editTeacher($event)" 
+  (deleteTeacher)="deleteTeacher($event)">
+</app-teachers-list>
+
+<app-create-teacher (teacherCreated)="onTeacherCreated()"></app-create-teacher>
+<button (click) = "logout()">Logout</button>
+
+<app-edit-teacher 
+  *ngIf="editingTeacher" 
+  [teacher]="editingTeacher" 
+  (closeEditor)="closeEditor()" 
+  (saveTeacher)="updateTeacher($event)">
+</app-edit-teacher>
