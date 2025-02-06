@@ -1,5 +1,5 @@
 import { Component, EventEmitter,Output} from '@angular/core';
-import { TeacherService } from '../teacher.service';
+import { TeacherService } from '../../services/teacher.service';
 import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-create-teacher',

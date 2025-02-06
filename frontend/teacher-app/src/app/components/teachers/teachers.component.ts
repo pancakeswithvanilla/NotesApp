@@ -1,5 +1,5 @@
 import { Component,OnInit } from '@angular/core';
-import { TeacherService } from '../teacher.service';
+import { TeacherService } from '../../services/teacher.service';
 import { CommonModule } from '@angular/common';
 import { CreateTeacherComponent } from '../create-teacher/create-teacher.component';
 import { EditTeacherComponent } from '../edit-teacher/edit-teacher.component';
