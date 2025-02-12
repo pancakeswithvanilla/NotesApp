@@ -10,7 +10,10 @@ private apiUrl = 'http://127.0.0.1:8000/api/teachers/'
   constructor(private http:HttpClient, private authService:AuthService) { } 
   getHeaders():HttpHeaders{
     const token = this.authService.getToken();
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`)
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json' 
+    });
   }
   getTeachers():Observable<any[]>{
     return this.http.get<any[]>(this.apiUrl, {headers:this.getHeaders()});
