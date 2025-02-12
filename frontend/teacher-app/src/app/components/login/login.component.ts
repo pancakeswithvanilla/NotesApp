@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   username:string = "";
   password:string = "";
+  confpassword:string = ""
   errorMessage:string = ""
   @Input() logreg:string = ""
   constructor(private router:Router, private authService:AuthService)
@@ -26,10 +27,10 @@ export class LoginComponent {
     }
   }
   register() {
-    const userData = { username: this.username, password: this.password, email: this.email };
+    const userData = { username: this.username, password: this.password, confpassword: this.confpassword};
     this.authService.register(userData).subscribe(
       response => {
-        alert('Registration successful! You can now log in.');
+        this.router.navigate(['/login'])
       },
       error => {
         this.errorMessage = 'Registration failed. Please try again.';

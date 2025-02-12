@@ -6,13 +6,16 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000/api/token/';
-
+  private registerUrl='http://127.0.0.1:8000/api/register/';
   constructor(private http:HttpClient) { 
   }
 
   login(credentials:{username:string, password:string}):Observable<any>{
     return this.http.post(this.apiUrl, credentials);
 
+  }
+  register(credentials:{username:string, password:string}):Observable<any>{
+    return this.http.post(this.registerUrl,credentials )
   }
 
   saveToken(token:string){

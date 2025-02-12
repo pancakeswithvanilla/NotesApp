@@ -2,6 +2,7 @@
 <form (submit)="submitForm(); $event.preventDefault();">
     <label>Username:<input type="text" [(ngModel)]="username" name="username" required></label><br>
     <label>Password:<input type="text" [(ngModel)]="password" name ="password" required></label><br>
+    <div *ngIf="logreg ==='Register Page'"><label>Confirm Password:<input type="text" [(ngModel)]="confpassword" name ="confpassword" required></label><br></div>
     <button type="submit">Submit</button>
 </form>
 <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
