@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000/api/token/';
   private registerUrl='http://127.0.0.1:8000/api/register/';
+  private refreshUrl = 'http://127.0.0.1:8000/api/token/refresh/';
   constructor(private http:HttpClient) { 
   }
 
