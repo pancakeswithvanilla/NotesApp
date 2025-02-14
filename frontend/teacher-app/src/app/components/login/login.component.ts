@@ -39,7 +39,8 @@ export class LoginComponent {
   }
   login(){
     this.authService.login({ username: this.username, password: this.password }).subscribe(response =>{
-      this.authService.saveToken(response.access);
+      console.log("Backend Response:", response);  
+      this.authService.saveToken(response.access, response.refresh);
       this.router.navigate(['/teachers'])
     }, (error)=>{
       console.log("An error occured while logging in: ", error)

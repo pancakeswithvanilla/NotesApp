@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,9 +21,10 @@ export class AuthService {
     return this.http.post(this.registerUrl,credentials )
   }
 
-  saveToken(token:string){
+  saveToken(token:string, refreshtoken:string){
     if (typeof window !== 'undefined' && localStorage){
       localStorage.setItem('jwt_token',token);
+      localStorage.setItem('refr_jwt_token', refreshtoken)
     }
   }
 
@@ -32,16 +35,32 @@ export class AuthService {
     return null;
   }
 
-  isAuthenticated():boolean{
-    if (this.getToken()){
-      return true;
-    }
-    return false;
+  getRefreshToken():string|null{
+    if(typeof window !=='undefined' && localStorage)
+      {
+        return localStorage.getItem('refr_jwt_token');
+      }
+      return null;
   }
-
+  isAuthenticated(): Observable<boolean> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      console.log("No refresh token found.");
+      return of(false);
+    }
+    return this.http.post<any>(this.refreshUrl, { refresh: refreshToken }).pipe(
+      catchError(() => {
+        console.log("Refresh token expired, logging out...");
+        this.logout();
+        return of(false); 
+      })
+    );
+  }
+  
   logout(): void {
     if (typeof window !== 'undefined' && localStorage) {
       localStorage.removeItem('jwt_token');
+      localStorage.removeItem('refr_jwt_token');
     }
   }
 }
