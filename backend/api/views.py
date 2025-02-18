@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import Teacher
+from .models import Subject
 from .forms import TeacherForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -8,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
-from .serializers import TeacherSerializer, UserSerializer
+from .serializers import TeacherSerializer, UserSerializer, SubjectSerializer
 from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
@@ -18,13 +19,12 @@ def teacher_list(request):
     serializer = TeacherSerializer(teachers, many = True)
     return Response(serializer.data)
 
-@api_view(["GET"])
-def test_auth(request):
-    """Test authentication with a hardcoded username/password."""
-    user = authenticate(username="ana", password="ana")
-    if user:
-        return Response({"status": "Authenticated"})
-    return Response({"status": "Failed"}, status=status.HTTP_401_UNAUTHORIZED)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def subject_list(request):
+    subjects = Subject.objects.filter(user = request.user)
+    serializer = SubjectSerializer(subjects, many = True)
+    return Response(serializer.data)
 
 @csrf_exempt
 @api_view(['POST'])
@@ -38,6 +38,18 @@ def create_teacher(request):
         serializer.save(user=request.user) 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_subject(request):
+    data = request.data.copy()
+    data['user']=request.user.id
+    serializer = SubjectSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save(user = request.user)
+        return Response(serializer.data, status = status.HTTP_201_CREATED)
+    return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
     
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])

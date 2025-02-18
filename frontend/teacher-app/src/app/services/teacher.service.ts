@@ -18,9 +18,15 @@ private apiUrl = 'http://127.0.0.1:8000/api/teachers/'
   getTeachers():Observable<any[]>{
     return this.http.get<any[]>(this.apiUrl, {headers:this.getHeaders()});
   }
-  
+  getSubjects():Observable<any[]>{
+    return this.http.get<any[]>(`${this.apiUrl}subjects/`,{headers:this.getHeaders()})
+  }
   createTeacher(teacherData:any):Observable<any>{
     return this.http.post<any>(`${this.apiUrl}create/`, teacherData, {headers:this.getHeaders()});
+  }
+  createSubject(subjectData:any):Observable<any>{
+    console.log(subjectData)
+    return this.http.post<any>(`${this.apiUrl}createsubject/`,subjectData, {headers:this.getHeaders()});
   }
   deleteTeacher(teacherId:number):Observable<any>{
     return this.http.delete<any>(`${this.apiUrl}delete/${teacherId}`, {headers:this.getHeaders()});

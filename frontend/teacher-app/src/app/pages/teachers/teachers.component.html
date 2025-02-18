@@ -7,6 +7,7 @@
 </app-teachers-list>
 
 <app-create-teacher (teacherCreated)="onTeacherCreated()"></app-create-teacher>
+<app-create-subject (subjectCreated)="onSubjectCreated()"></app-create-subject>
 <button (click) = "logout()">Logout</button>
 
 <app-edit-teacher 
@@ -15,3 +16,9 @@
   (closeEditor)="closeEditor()" 
   (saveTeacher)="updateTeacher($event)">
 </app-edit-teacher>
+<ul>
+  <h2>Subjects List: </h2>
+  <li *ngFor="let subject of subjects">
+    {{ subject.subjectName }} 
+  </li>
+</ul>

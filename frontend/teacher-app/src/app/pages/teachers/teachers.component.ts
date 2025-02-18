@@ -3,19 +3,21 @@ import { TeacherService } from '../../services/teacher.service';
 import { CommonModule } from '@angular/common';
 import { CreateTeacherComponent } from '../../components/create-teacher/create-teacher.component';
 import { EditTeacherComponent } from '../../components/edit-teacher/edit-teacher.component';
+import { CreateSubjectComponent } from '../../components/create-subject/create-subject.component';
 import { TeachersListComponent } from '../../components/teachers-list/teachers-list.component';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-teachers',
-  imports: [CommonModule, CreateTeacherComponent, EditTeacherComponent, TeachersListComponent],
+  imports: [CommonModule, CreateTeacherComponent, EditTeacherComponent, TeachersListComponent, CreateSubjectComponent],
   standalone: true,
   templateUrl: './teachers.component.html',
   styleUrls: ['./teachers.component.css']
 })
 export class TeachersComponent implements OnInit, OnDestroy {
   teachers: any[] = [];
+  subjects:any[]=[];
   editingTeacher: any = null;
 
   private onClickListener!: EventListener;
@@ -28,6 +30,7 @@ export class TeachersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadTeachers();
+    this.loadSubjects();
     this.checkAuthStatus(); 
     this.bindHostListeners();
   }
@@ -74,6 +77,13 @@ export class TeachersComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadSubjects(){
+    this.teacherService.getSubjects().subscribe((data)=>{
+      this.subjects = data;
+      console.log("Subjects", this.subjects)
+    })
+  }
+
   editTeacher(teacher: any) {
     this.editingTeacher = { ...teacher };
   }
@@ -113,5 +123,8 @@ export class TeachersComponent implements OnInit, OnDestroy {
 
   onTeacherCreated() {
     this.loadTeachers();
+  }
+  onSubjectCreated(){
+    this.loadSubjects();
   }
 }
