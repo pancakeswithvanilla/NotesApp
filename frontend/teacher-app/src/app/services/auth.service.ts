@@ -42,6 +42,7 @@ export class AuthService {
       }
       return null;
   }
+
   isAuthenticated(): Observable<boolean> {
     const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
@@ -51,7 +52,6 @@ export class AuthService {
     return this.http.post<any>(this.refreshUrl, { refresh: refreshToken }).pipe(
       catchError(() => {
         console.log("Refresh token expired, logging out...");
-        this.logout();
         return of(false); 
       })
     );

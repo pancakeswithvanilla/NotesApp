@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { TeacherService } from '../../services/teacher.service';
 import { CommonModule } from '@angular/common';
 import { CreateTeacherComponent } from '../../components/create-teacher/create-teacher.component';
@@ -6,62 +6,112 @@ import { EditTeacherComponent } from '../../components/edit-teacher/edit-teacher
 import { TeachersListComponent } from '../../components/teachers-list/teachers-list.component';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-teachers',
-  imports: [CommonModule, CreateTeacherComponent,EditTeacherComponent, TeachersListComponent],
-  standalone:true,
+  imports: [CommonModule, CreateTeacherComponent, EditTeacherComponent, TeachersListComponent],
+  standalone: true,
   templateUrl: './teachers.component.html',
-  styleUrl: './teachers.component.css'
+  styleUrls: ['./teachers.component.css']
 })
-export class TeachersComponent implements OnInit {
-  teachers:any[]=[];
+export class TeachersComponent implements OnInit, OnDestroy {
+  teachers: any[] = [];
   editingTeacher: any = null;
-  constructor(private teacherService: TeacherService, private authService:AuthService, private router:Router){ 
 
+  private onClickListener!: EventListener;
+
+  constructor(
+    private teacherService: TeacherService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.loadTeachers();
+    this.checkAuthStatus(); 
+    this.bindHostListeners();
   }
-  ngOnInit():void{
-   this.loadTeachers();
+
+  ngOnDestroy(): void {
+    console.log('Cleaning up listeners...');
+    this.removeHostListeners();  
   }
-  loadTeachers(){
-    this.teacherService.getTeachers().subscribe(data =>{
+
+  checkAuthStatus() {
+    console.log('Checking refresh token...');
+    this.authService.isAuthenticated().subscribe((isAuthenticated) => {
+      if (!isAuthenticated) {
+        console.log('Refresh token expired or not found. Logging out...');
+        this.authService.logout();
+        this.router.navigate(['login']);
+      }
+    });
+  }
+
+  bindHostListeners() {
+    console.log('Binding HostListeners for scroll and click events.');
+    this.onClickListener = this.onUserInteraction.bind(this);
+
+    this.addHostListeners();
+  }
+
+  addHostListeners() {
+    document.addEventListener('click', this.onClickListener);
+  }
+
+  removeHostListeners() {
+    document.removeEventListener('click', this.onClickListener);
+  }
+
+  onUserInteraction(event: Event) {
+    console.log('User interaction detected: Click event');
+    this.checkAuthStatus();
+  }
+
+  loadTeachers() {
+    this.teacherService.getTeachers().subscribe((data) => {
       this.teachers = data;
     });
   }
-  editTeacher(teacher:any){
-    this.editingTeacher = {...teacher}
-  }
-  updateTeacher(updatedTeacher:any){
-    this.teacherService.editTeacher(updatedTeacher.id, updatedTeacher).subscribe(response =>{
-      this.loadTeachers();
-      this.editingTeacher = null;
-    }, 
-  (error)=>{
-    console.log('Error updating teacher:', error);
-  })
+
+  editTeacher(teacher: any) {
+    this.editingTeacher = { ...teacher };
   }
 
-  closeEditor(){
+  updateTeacher(updatedTeacher: any) {
+    this.teacherService.editTeacher(updatedTeacher.id, updatedTeacher).subscribe(
+      (response) => {
+        this.loadTeachers();
+        this.editingTeacher = null;
+      },
+      (error) => {
+        console.log('Error updating teacher:', error);
+      }
+    );
+  }
+
+  closeEditor() {
     this.editingTeacher = null;
   }
-  deleteTeacher(teacherId:number){
-    this.teacherService.deleteTeacher(teacherId).subscribe(()=>{
-      this.teachers = this.teachers.filter(teacher =>teacher.id !== teacherId)
-    },
-    (error) =>{
-      console.log("Error deleting teacher: ", error)
-    }
-  )
+
+  deleteTeacher(teacherId: number) {
+    this.teacherService.deleteTeacher(teacherId).subscribe(
+      () => {
+        this.teachers = this.teachers.filter((teacher) => teacher.id !== teacherId);
+      },
+      (error) => {
+        console.log('Error deleting teacher: ', error);
+      }
+    );
   }
 
-  logout(){
-    console.log("Logging out")
+  logout() {
+    console.log('Logging out');
     this.authService.logout();
     this.router.navigate(['login']);
-
   }
 
-  onTeacherCreated(){
+  onTeacherCreated() {
     this.loadTeachers();
   }
-  
 }
