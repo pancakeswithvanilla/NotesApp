@@ -2,9 +2,12 @@ from .models import Teacher, Subject
 from rest_framework import serializers
 from django.contrib.auth.models import User
 class TeacherSerializer(serializers.ModelSerializer):
+    subjects = serializers.PrimaryKeyRelatedField(
+        queryset=Subject.objects.all(), many=True
+    )
     class Meta:
         model = Teacher 
-        fields = ["id", "user", "name", "age"]
+        fields = ["id", "user", "name", "age","subjects"]
         extra_kwargs = {'user': {'read_only': True}}
 
 class SubjectSerializer(serializers.ModelSerializer):

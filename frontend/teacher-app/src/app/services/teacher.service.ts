@@ -32,6 +32,7 @@ private apiUrl = 'http://127.0.0.1:8000/api/teachers/'
     return this.http.delete<any>(`${this.apiUrl}delete/${teacherId}`, {headers:this.getHeaders()});
   }
   editTeacher(teacherId:number, teacherData:any):Observable<any>{
+    console.log("edit teacher data", teacherData)
     return this.http.put<any>(`${this.apiUrl}edit/${teacherId}/`, teacherData, {headers:this.getHeaders()})
   }
 }

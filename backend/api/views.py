@@ -35,8 +35,9 @@ def create_teacher(request):
 
     serializer = TeacherSerializer(data=data)
     if serializer.is_valid():
-        serializer.save(user=request.user) 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        teacher = serializer.save(user=request.user) 
+        teacher.subjects.set(data.get('subjects', []))
+        return Response(TeacherSerializer(teacher).data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt

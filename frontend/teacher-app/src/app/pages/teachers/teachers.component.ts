@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-teachers',
   imports: [CommonModule, CreateTeacherComponent, EditTeacherComponent, TeachersListComponent, CreateSubjectComponent],
+  providers:[TeacherService],
   standalone: true,
   templateUrl: './teachers.component.html',
   styleUrls: ['./teachers.component.css']
@@ -29,8 +30,8 @@ export class TeachersComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadTeachers();
     this.loadSubjects();
+    this.loadTeachers();
     this.checkAuthStatus(); 
     this.bindHostListeners();
   }
@@ -74,6 +75,12 @@ export class TeachersComponent implements OnInit, OnDestroy {
   loadTeachers() {
     this.teacherService.getTeachers().subscribe((data) => {
       this.teachers = data;
+      this.teachers.forEach(teacher => {
+        teacher.subjectNames = teacher.subjects.map((subjectId: number) => {
+          const subject = this.subjects.find(subj => subj.id === subjectId);
+          return subject ? subject.subjectName : '';  
+        });
+      });
     });
   }
 
