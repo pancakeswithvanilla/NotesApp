@@ -6,9 +6,10 @@
   (deleteTeacher)="deleteTeacher($event)">
 </app-teachers-list>
 
-<app-create-teacher (teacherCreated)="onTeacherCreated()" [subjects] ="subjects"></app-create-teacher>
-<app-create-subject (subjectCreated)="onSubjectCreated()"></app-create-subject>
-<button (click) = "logout()">Logout</button>
+<div class="create-wrapper">
+  <app-create-teacher (teacherCreated)="onTeacherCreated()" [subjects]="subjects"></app-create-teacher>
+  <app-create-subject (subjectCreated)="onSubjectCreated()"></app-create-subject>
+</div>
 
 <app-edit-teacher 
   *ngIf="editingTeacher" 
@@ -17,4 +18,6 @@
   (closeEditor)="closeEditor()" 
   (saveTeacher)="updateTeacher($event)">
 </app-edit-teacher>
+
+<button (click) = "logout()">Logout</button>
 

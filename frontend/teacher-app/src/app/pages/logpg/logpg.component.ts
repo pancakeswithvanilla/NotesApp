@@ -4,7 +4,8 @@ import { LoginComponent } from '../../components/login/login.component';
   selector: 'app-logpg',
   imports: [LoginComponent],
   templateUrl: './logpg.component.html',
-  styleUrl: './logpg.component.css'
+  styleUrl: './logpg.component.css',
+  
 })
 export class LogpgComponent {
 
