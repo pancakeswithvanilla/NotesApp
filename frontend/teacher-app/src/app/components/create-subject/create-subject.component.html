@@ -1,5 +1,10 @@
-<h2>Add New Subject</h2>
-<form (submit)="addSubject()">
+<h2>{{title}}</h2>
+<form  *ngIf="title ==='Add New Subject'" (submit)="addSubject()">
     <label>Subject: <input type="text" [(ngModel)] ="subjectName" name = "subjectName" required></label><br>
-    <button type = "submit">Add Subject</button>
+    <button type = "submit">Add</button>
+</form>
+
+<form  *ngIf="title==='Delete Subject'" (submit)="deleteSubject()">
+    <label>Subject: <input type="text" [(ngModel)] ="subjectName" name = "subjectName" required></label><br>
+    <button type="submit">Delete</button>
 </form>

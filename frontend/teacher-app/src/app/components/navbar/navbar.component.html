@@ -1,0 +1,18 @@
+`
+    <nav>
+      <ul>
+
+        <li *ngIf="currentRoute !== '/login' && currentRoute !== '/register'">
+          <a routerLink="/teachers" routerLinkActive="active">Teachers</a>
+        </li>
+        
+
+        <li *ngIf="currentRoute === '/' || currentRoute === '/login' || currentRoute === '/register'">
+          <a routerLink="/login" routerLinkActive="active">Login</a>
+        </li>
+        <li *ngIf="currentRoute === '/' || currentRoute === '/login' || currentRoute === '/register'">
+          <a routerLink="/register" routerLinkActive="active">Register</a>
+        </li>
+      </ul>
+    </nav>
+  `

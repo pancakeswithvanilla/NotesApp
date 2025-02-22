@@ -25,7 +25,7 @@ addTeacher():void{
       .filter(subj => this.selectedSubjects.includes(subj.subjectName)) 
       .map(subj => subj.id);
     this.teacherService.createTeacher({name:this.name, age:this.age, subjects: selectedSubjectIds}).subscribe(()=>{
-      this.teacherCreated.emit();
+      this.teacherCreated.emit(); //clear input fields after successful generation of new teacher
       this.name = ''
       this.age = null;
       this.selectedSubjects = []

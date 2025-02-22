@@ -51,13 +51,27 @@ def create_subject(request):
         serializer.save(user = request.user)
         return Response(serializer.data, status = status.HTTP_201_CREATED)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-    
+
+@csrf_exempt
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_subject(request, subject_id):
+    print("cat")
+    subject = get_object_or_404(Subject, id=subject_id, user=request.user)
+    print("Subject", subject)
+    teachers_with_subject = Teacher.objects.filter(subjects = subject, user = request.user)
+    print("Teachers with subject", teachers_with_subject)
+    for teacher in teachers_with_subject:
+        teacher.subjects.remove(subject)
+    subject.delete()
+    return Response ({status:'Subject deleted successfully'}, status = status.HTTP_204_NO_CONTENT)
+
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_teacher(request, teacher_id):
     teacher = get_object_or_404(Teacher, id=teacher_id, user=request.user)
     teacher.delete()
-    return Response({'status': 'Teacher deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    return Response({'message': 'Teacher deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])

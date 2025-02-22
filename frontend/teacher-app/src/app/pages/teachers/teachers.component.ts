@@ -21,7 +21,7 @@ export class TeachersComponent implements OnInit, OnDestroy {
   subjects:any[]=[];
   editingTeacher: any = null;
 
-  private onClickListener!: EventListener;
+  private onClickListener!: EventListener; //non-null assertion
 
   constructor(
     private teacherService: TeacherService,
@@ -36,7 +36,7 @@ export class TeachersComponent implements OnInit, OnDestroy {
     this.bindHostListeners();
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy(): void { //lifecycle hook of the component
     console.log('Cleaning up listeners...');
     this.removeHostListeners();  
   }
@@ -54,7 +54,7 @@ export class TeachersComponent implements OnInit, OnDestroy {
 
   bindHostListeners() {
     console.log('Binding HostListeners for scroll and click events.');
-    this.onClickListener = this.onUserInteraction.bind(this);
+    this.onClickListener = this.onUserInteraction.bind(this); //this should still refer to comp not doc when calling fct.
 
     this.addHostListeners();
   }
@@ -95,9 +95,9 @@ export class TeachersComponent implements OnInit, OnDestroy {
     this.editingTeacher = { ...teacher };
   }
 
-  updateTeacher(updatedTeacher: any) {
+  updateTeacher(updatedTeacher: any) { //executed when edit form event emitter fires
     this.teacherService.editTeacher(updatedTeacher.id, updatedTeacher).subscribe(
-      (response) => {
+      (response) => { //calls service fct. to talk to the backend and edit the teacher info in db based on id
         this.loadTeachers();
         this.editingTeacher = null;
       },
@@ -133,5 +133,18 @@ export class TeachersComponent implements OnInit, OnDestroy {
   }
   onSubjectCreated(){
     this.loadSubjects();
+  }
+  onSubjectDeleted(subjectName:string){
+    const subject = this.subjects.find(subj =>subj.subjectName === subjectName)
+    if(subject){
+      console.log("Subject Id", subject.id)
+      this.teacherService.deleteSubject(subject.id).subscribe(()=>{
+        this.loadSubjects();
+        this.loadTeachers();
+      })
+    }
+    else{
+      console.log("Subject not found");
+    }
   }
 }

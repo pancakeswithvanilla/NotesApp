@@ -8,7 +8,8 @@
 
 <div class="create-wrapper">
   <app-create-teacher (teacherCreated)="onTeacherCreated()" [subjects]="subjects"></app-create-teacher>
-  <app-create-subject (subjectCreated)="onSubjectCreated()"></app-create-subject>
+  <app-create-subject (subjectCreated)="onSubjectCreated()" [title] ="'Add New Subject'"></app-create-subject>
+  <app-create-subject (subjectDeleted)="onSubjectDeleted($event)" [title] ="'Delete Subject'"></app-create-subject>
 </div>
 
 <app-edit-teacher 
