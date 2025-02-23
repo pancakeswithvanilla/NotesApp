@@ -14,21 +14,23 @@ export class CreateTeacherComponent {
   name: string ='';
   age:number | null = null;
   selectedSubjects:string[]=[];
+  numHours:number=18;
   @Output() teacherCreated = new EventEmitter <void>();
   @Input() subjects: any[] = [];
 constructor(private teacherService: TeacherService){
 
 }
 addTeacher():void{
-  if (this.age && this.name && this.selectedSubjects.length > 0) {
+  if (this.age && this.name && this.selectedSubjects.length > 0 && this.numHours) {
     const selectedSubjectIds = this.subjects
       .filter(subj => this.selectedSubjects.includes(subj.subjectName)) 
       .map(subj => subj.id);
-    this.teacherService.createTeacher({name:this.name, age:this.age, subjects: selectedSubjectIds}).subscribe(()=>{
+    this.teacherService.createTeacher({name:this.name, age:this.age, subjects: selectedSubjectIds, numHours:this.numHours}).subscribe(()=>{
       this.teacherCreated.emit(); //clear input fields after successful generation of new teacher
       this.name = ''
       this.age = null;
       this.selectedSubjects = []
+      this.numHours = 18;
 
     })
   }

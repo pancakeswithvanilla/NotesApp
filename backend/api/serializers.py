@@ -7,7 +7,7 @@ class TeacherSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Teacher 
-        fields = ["id", "user", "name", "age","subjects"]
+        fields = ["id", "user", "name", "age","subjects", "numHours"]
         extra_kwargs = {'user': {'read_only': True}}
 
 class SubjectSerializer(serializers.ModelSerializer):

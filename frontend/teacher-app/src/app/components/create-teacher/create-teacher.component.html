@@ -5,5 +5,6 @@
   <p>Subject: <select name="selectedSubjects" id="subject" [(ngModel)] = "selectedSubjects" multiple>
     <option *ngFor="let subject of subjects" [value]="subject.subjectName">{{subject.subjectName}}</option>
   </select><br></p>
+  <label>Available hours: <input type="number" [(ngModel)]="numHours" name="numHours" required></label><br>
   <button type="submit">Add Teacher</button>
 </form>

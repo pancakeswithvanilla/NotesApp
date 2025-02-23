@@ -13,18 +13,18 @@ export class EditTeacherComponent {
 @Input() subjects:any[] = []
 @Output() closeEditor = new EventEmitter <void>();
 @Output() saveTeacher = new EventEmitter <any>();
-selectedSubjects:string[]=[];
 
+ngOnInit() {
+  this.teacher.selectedSubjects = [...this.teacher.subjects]; 
+}
 saveChanges() {
-  const selectedSubjectIds = this.subjects
-    .filter(subj => this.selectedSubjects.includes(subj.subjectName))
-    .map(subj => subj.id); //db setup to receive id numbers not strings, therefore conversion before sending teacherData
 
   const teacherData = {
     id: this.teacher.id, 
     name: this.teacher.name,
     age: this.teacher.age,
-    subjects: selectedSubjectIds  
+    subjects: this.teacher.selectedSubjects,
+    numHours: this.teacher.numHours  
   };
 
   this.saveTeacher.emit(teacherData);

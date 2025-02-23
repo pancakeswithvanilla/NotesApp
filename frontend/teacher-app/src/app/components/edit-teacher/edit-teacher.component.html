@@ -2,9 +2,10 @@
 <form (submit)="saveChanges(); $event.preventDefault()">
   <label>Name: <input type="text" [(ngModel)]="teacher.name" name ="name" required></label><br>
   <label>Age: <input type="number" [(ngModel)]="teacher.age" name = "age" required></label><br>
-  <p>Subject: <select name="selectedSubjects" id="subject" [(ngModel)] = "selectedSubjects" multiple>
-    <option *ngFor="let subject of subjects" [value]="subject.subjectName">{{subject.subjectName}}</option>
+  <p>Subject: <select name="selectedSubjects" id="subject" [(ngModel)] = "teacher.selectedSubjects" multiple>
+    <option *ngFor="let subject of subjects" [value]="subject.id" >{{subject.subjectName}}</option>
   </select><br></p>
+  <label>Available hours: <input type="number" [(ngModel)]="teacher.numHours" name="numHours" required></label><br>
   <button type="submit">Save</button>
   <button type = "button" (click)="closeEditor.emit()" >Cancel</button>
 </form>

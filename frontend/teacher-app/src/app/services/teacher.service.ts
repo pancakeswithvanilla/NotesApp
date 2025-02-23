@@ -28,7 +28,7 @@ private apiUrl = 'http://127.0.0.1:8000/api/teachers/'
     return this.http.post<any>(`${this.apiUrl}createsubject/`,subjectData, {headers:this.getHeaders()});
   }
   deleteSubject(subjectId:number):Observable<any>{
-    return this.http.delete<any>(`${this.apiUrl}deletesubject/`, {headers:this.getHeaders()})
+    return this.http.delete<any>(`${this.apiUrl}deletesubject/${subjectId}`, {headers:this.getHeaders()})
   }
   deleteTeacher(teacherId:number):Observable<any>{
     return this.http.delete<any>(`${this.apiUrl}delete/${teacherId}`, {headers:this.getHeaders()});

@@ -56,15 +56,12 @@ def create_subject(request):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_subject(request, subject_id):
-    print("cat")
     subject = get_object_or_404(Subject, id=subject_id, user=request.user)
-    print("Subject", subject)
     teachers_with_subject = Teacher.objects.filter(subjects = subject, user = request.user)
-    print("Teachers with subject", teachers_with_subject)
     for teacher in teachers_with_subject:
         teacher.subjects.remove(subject)
     subject.delete()
-    return Response ({status:'Subject deleted successfully'}, status = status.HTTP_204_NO_CONTENT)
+    return Response ({"message":'Subject deleted successfully'}, status = status.HTTP_204_NO_CONTENT)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
