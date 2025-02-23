@@ -21,6 +21,13 @@ def teacher_list(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def get_teacher(request, teacher_id):
+    teachers = Teacher.objects.filter(user = request.user, id = teacher_id)
+    serializer = TeacherSerializer(teachers, many = True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def subject_list(request):
     subjects = Subject.objects.filter(user = request.user)
     serializer = SubjectSerializer(subjects, many = True)

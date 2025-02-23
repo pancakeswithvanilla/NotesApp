@@ -7,6 +7,8 @@ import { CreateSubjectComponent } from '../../components/create-subject/create-s
 import { TeachersListComponent } from '../../components/teachers-list/teachers-list.component';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-teachers',
@@ -26,7 +28,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   constructor(
     private teacherService: TeacherService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route:ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -34,12 +37,23 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.loadTeachers();
     this.checkAuthStatus(); 
     this.bindHostListeners();
+    this.route.queryParams.subscribe(params => {
+      const teacherId = params['teacherId'];
+      if (teacherId) {
+        this.loadTeacherForEditing(teacherId);
+      }
+    });
   }
 
   ngOnDestroy(): void { //lifecycle hook of the component
     console.log('Cleaning up listeners...');
     this.removeHostListeners();  
   }
+
+  loadTeacherForEditing(teacherId: number) {
+    this.teacherService.getTeacherById(teacherId).subscribe((teacher) => { //create route
+      this.editingTeacher = teacher;
+    });}
 
   checkAuthStatus() {
     console.log('Checking refresh token...');

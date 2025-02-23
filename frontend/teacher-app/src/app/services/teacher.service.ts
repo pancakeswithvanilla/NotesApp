@@ -21,6 +21,9 @@ private apiUrl = 'http://127.0.0.1:8000/api/admin/'
   getSubjects():Observable<any[]>{
     return this.http.get<any[]>(`${this.apiUrl}subjects/`,{headers:this.getHeaders()})
   }
+  getTeacherById(teacherId:number):Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}${teacherId}`, {headers:this.getHeaders()});
+  }
   createTeacher(teacherData:any):Observable<any>{
     return this.http.post<any>(`${this.apiUrl}create/`, teacherData, {headers:this.getHeaders()});
   }
