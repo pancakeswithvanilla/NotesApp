@@ -1,17 +1,4 @@
 <h1>Admin Page</h1>
-
-<app-teachers-list 
-  [teachers]="teachers" 
-  (editTeacher)="editTeacher($event)" 
-  (deleteTeacher)="deleteTeacher($event)">
-</app-teachers-list>
-
-<div class="create-wrapper">
-  <app-create-teacher (teacherCreated)="onTeacherCreated()" [subjects]="subjects"></app-create-teacher>
-  <app-create-subject (subjectCreated)="onSubjectCreated()" [title] ="'Add New Subject'"></app-create-subject>
-  <app-create-subject (subjectDeleted)="onSubjectDeleted($event)" [title] ="'Delete Subject'"></app-create-subject>
-</div>
-
 <app-edit-teacher 
   *ngIf="editingTeacher" 
   [teacher]="editingTeacher" 
@@ -19,6 +6,13 @@
   (closeEditor)="closeEditor()" 
   (saveTeacher)="updateTeacher($event)">
 </app-edit-teacher>
+<div class="create-wrapper">
+  <app-create-teacher (teacherCreated)="onTeacherCreated()" [subjects]="subjects"></app-create-teacher>
+  <app-create-subject (subjectCreated)="onSubjectCreated()" [title] ="'Add New Subject'"></app-create-subject>
+  <app-create-subject (subjectDeleted)="onSubjectDeleted($event)" [title] ="'Delete Subject'"></app-create-subject>
+</div>
+
+
 
 <button (click) = "logout()">Logout</button>
 

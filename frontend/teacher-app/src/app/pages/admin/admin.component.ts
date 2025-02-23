@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CreateTeacherComponent } from '../../components/create-teacher/create-teacher.component';
 import { EditTeacherComponent } from '../../components/edit-teacher/edit-teacher.component';
 import { CreateSubjectComponent } from '../../components/create-subject/create-subject.component';
-import { TeachersListComponent } from '../../components/teachers-list/teachers-list.component';
+//import { TeachersListComponent } from '../../components/teachers-list/teachers-list.component';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-teachers',
-  imports: [CommonModule, CreateTeacherComponent, EditTeacherComponent, TeachersListComponent, CreateSubjectComponent],
+  imports: [CommonModule, CreateTeacherComponent, EditTeacherComponent, CreateSubjectComponent],
   providers:[TeacherService],
   standalone: true,
   templateUrl: './admin.component.html',
@@ -40,6 +40,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       const teacherId = params['teacherId'];
       if (teacherId) {
+        console.log("teacherId")
         this.loadTeacherForEditing(teacherId);
       }
     });
@@ -52,7 +53,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   loadTeacherForEditing(teacherId: number) {
     this.teacherService.getTeacherById(teacherId).subscribe((teacher) => { //create route
-      this.editingTeacher = teacher;
+      this.editingTeacher = teacher[0];
     });}
 
   checkAuthStatus() {
@@ -101,13 +102,12 @@ export class AdminComponent implements OnInit, OnDestroy {
   loadSubjects(){
     this.teacherService.getSubjects().subscribe((data)=>{
       this.subjects = data;
-      console.log("Subjects", this.subjects)
     })
   }
 
-  editTeacher(teacher: any) {
-    this.editingTeacher = { ...teacher };
-  }
+  // editTeacher(teacher: any) {
+  //   this.editingTeacher = { ...teacher };
+  // }
 
   updateTeacher(updatedTeacher: any) { //executed when edit form event emitter fires
     this.teacherService.editTeacher(updatedTeacher.id, updatedTeacher).subscribe(
