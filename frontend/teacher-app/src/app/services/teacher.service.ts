@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TeacherService {
-private apiUrl = 'http://127.0.0.1:8000/api/teachers/'
+private apiUrl = 'http://127.0.0.1:8000/api/admin/'
   constructor(private http:HttpClient, private authService:AuthService) { } 
   getHeaders():HttpHeaders{
     const token = this.authService.getToken();

@@ -13,10 +13,10 @@ import { Router } from '@angular/router';
   imports: [CommonModule, CreateTeacherComponent, EditTeacherComponent, TeachersListComponent, CreateSubjectComponent],
   providers:[TeacherService],
   standalone: true,
-  templateUrl: './teachers.component.html',
-  styleUrls: ['./teachers.component.css']
+  templateUrl: './admin.component.html',
+  styleUrls: ['./admin.component.css']
 })
-export class TeachersComponent implements OnInit, OnDestroy {
+export class AdminComponent implements OnInit, OnDestroy {
   teachers: any[] = [];
   subjects:any[]=[];
   editingTeacher: any = null;
