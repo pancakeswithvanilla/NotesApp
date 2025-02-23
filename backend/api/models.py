@@ -13,6 +13,7 @@ class Teacher(models.Model):
     age = models.IntegerField()
     subjects = models.ManyToManyField(Subject, related_name = "teachers", blank=True)
     numHours = models.IntegerField(default=18)
+    image = models.ImageField(upload_to='teacher_images/', null=True, blank=True)
     def __str__(self):
         return self.name
     

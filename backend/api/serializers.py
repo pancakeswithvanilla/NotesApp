@@ -1,14 +1,21 @@
 from .models import Teacher, Subject
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.conf import settings
+
 class TeacherSerializer(serializers.ModelSerializer):
     subjects = serializers.PrimaryKeyRelatedField(
         queryset=Subject.objects.all(), many=True
     )
     class Meta:
         model = Teacher 
-        fields = ["id", "user", "name", "age","subjects", "numHours"]
+        fields = ["id", "user", "name", "age","subjects", "numHours", "image"]
         extra_kwargs = {'user': {'read_only': True}}
+    def get_image(self, obj):
+        if obj.image:
+            # Add the server base URL prefix to the image path
+            return settings.MEDIA_URL + str(obj.image)  # Will return '/media/teacher_images/...'
+        return None
 
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:

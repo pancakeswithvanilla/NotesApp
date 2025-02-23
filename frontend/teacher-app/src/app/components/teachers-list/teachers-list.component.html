@@ -1,8 +1,11 @@
 <h2>Teacher List</h2>
 <ul>
-  <li *ngFor="let teacher of teachers">
-    {{ teacher.name }} - {{ teacher.age }} years old - {{teacher.subjectNames}}-Available hours: {{teacher.numHours}}
-    <button (click)="onEdit(teacher)">Edit</button>
-    <button (click)="onDelete(teacher.id)">Delete</button>
+  <li *ngFor="let teacher of teachers" (click)="goToTeacherDetail(teacher.id)">
+    <img *ngIf="teacher.image" class="teacher-image" [src]="'http://127.0.0.1:8000' + teacher.image" alt="{{ teacher.name }}'s image">
+    <h2>{{ teacher.name }} </h2>
+    <div class="button-container">
+      <button (click)="onEdit(teacher)">Edit</button>
+      <button (click)="onDelete(teacher.id)">Delete</button>
+    </div>
   </li>
 </ul>

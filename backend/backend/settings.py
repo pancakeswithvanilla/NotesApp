@@ -14,7 +14,13 @@ from pathlib import Path
 from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import os
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Media settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # This points to the 'media' directory in the root of the project
 
 
 # Quick-start development settings - unsuitable for production

@@ -21,4 +21,7 @@ export class TeachersListComponent {
   onDelete(teacherId: number) {
     this.deleteTeacher.emit(teacherId);
   }
+  goToTeacherDetail(teacherId:number):void{
+    this.router.navigate([`/teacher/${teacherId}`])
+  }
 }

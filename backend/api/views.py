@@ -1,4 +1,7 @@
 from django.shortcuts import render,redirect
+import base64
+import uuid
+from django.core.files.base import ContentFile
 from .models import Teacher
 from .models import Subject
 from .forms import TeacherForm
@@ -38,14 +41,22 @@ def subject_list(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_teacher(request):
+    print("cat")
     data = request.data.copy()  
-    data['user'] = request.user.id  
+    data['user'] = request.user.id
+    if 'image' in data and data['image']:
+        image_data = data['image']
+        format, imgstr = image_data.split(';base64,')
+        ext = format.split('/')[-1]  
+        image = ContentFile(base64.b64decode(imgstr), name=f'{uuid.uuid4()}.{ext}')
+        data['image'] = image
 
     serializer = TeacherSerializer(data=data)
     if serializer.is_valid():
-        teacher = serializer.save(user=request.user) 
+        teacher = serializer.save(user=request.user)
         teacher.subjects.set(data.get('subjects', []))
         return Response(TeacherSerializer(teacher).data, status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @csrf_exempt
