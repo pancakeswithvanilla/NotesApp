@@ -25,11 +25,11 @@ saveChanges() {
     age: this.teacher.age,
     subjects: this.teacher.selectedSubjects,
     numHours: this.teacher.numHours ,
-    image:this.teacher.image
+    
   };
   if (this.imageFile) {
     this.convertImageToBase64(this.imageFile).then((base64Image) => {
-      teacherData.image = base64Image;
+      Object.defineProperty(teacherData, "image", base64Image)
       this.saveTeacher.emit(teacherData);
       
     }).catch((error) => {

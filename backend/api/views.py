@@ -38,13 +38,8 @@ def subject_list(request):
     return Response(serializer.data)
 
 def handle_image(data):
-    """Handles Base64 images or keeps existing file paths unchanged."""
     if 'image' in data and data['image']:
         image_data = data['image']
-        if image_data.startswith("/media/"):
-            data.pop("image")  
-            return data
-
         try:
             format, imgstr = image_data.split(';base64,')
             ext = format.split('/')[-1]  
@@ -110,7 +105,6 @@ def edit_teacher(request, teacher_id):
     data = handle_image(data)
     serializer = TeacherSerializer(teacher, data=data, partial=True)  
     if serializer.is_valid():
-        print("meow")
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     print("Serializer errors", serializer.errors)
