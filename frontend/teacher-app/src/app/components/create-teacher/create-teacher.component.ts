@@ -23,7 +23,7 @@ constructor(private teacherService: TeacherService){
 
 }
 onFileSelected(event: any) {
-  this.imageFile = event.target.files[0]; // Save the selected file
+  this.imageFile = event.target.files[0];
 }
 addTeacher(): void {
   if (this.age && this.name && this.selectedSubjects.length > 0 && this.numHours) {
@@ -38,23 +38,21 @@ addTeacher(): void {
       numHours: this.numHours,
     };
 
-    // If there's an image selected, convert it to Base64 and add it to the payload
+  
     if (this.imageFile) {
       this.convertImageToBase64(this.imageFile).then((base64Image) => {
         teacherData.image = base64Image;
-        console.log("teacher data", teacherData)
-        // Send the data as a normal JSON object
         this.teacherService.createTeacher(teacherData).subscribe(() => {
-          this.teacherCreated.emit(); // Reset form after successful creation
+          this.teacherCreated.emit();
           this.resetForm();
         });
       }).catch((error) => {
         console.error('Error converting image to Base64', error);
       });
     } else {
-      // Send the data without image if no image is selected
+
       this.teacherService.createTeacher(teacherData).subscribe(() => {
-        this.teacherCreated.emit(); // Reset form after successful creation
+        this.teacherCreated.emit(); 
         this.resetForm();
       });
     }
@@ -64,13 +62,13 @@ addTeacher(): void {
 convertImageToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string); // Resolve with Base64 data
-    reader.onerror = reject; // Reject if there's an error reading the file
-    reader.readAsDataURL(file); // Convert the image to Base64
+    reader.onloadend = () => resolve(reader.result as string); 
+    reader.onerror = reject; 
+    reader.readAsDataURL(file); 
   });
 }
 
-// Reset form after successful teacher creation
+
 resetForm() {
   this.name = '';
   this.age = null;

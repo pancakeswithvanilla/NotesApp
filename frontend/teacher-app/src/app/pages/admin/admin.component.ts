@@ -40,7 +40,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       const teacherId = params['teacherId'];
       if (teacherId) {
-        console.log("teacherId")
+        console.log("teacherId", teacherId)
         this.loadTeacherForEditing(teacherId);
       }
     });
@@ -54,6 +54,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   loadTeacherForEditing(teacherId: number) {
     this.teacherService.getTeacherById(teacherId).subscribe((teacher) => { //create route
       this.editingTeacher = teacher[0];
+      console.log("editing teacher" , this.editingTeacher)
     });}
 
   checkAuthStatus() {

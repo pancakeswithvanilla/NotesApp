@@ -13,7 +13,7 @@ export class EditTeacherComponent {
 @Input() subjects:any[] = []
 @Output() closeEditor = new EventEmitter <void>();
 @Output() saveTeacher = new EventEmitter <any>();
-
+imageFile:File|null =null;
 ngOnInit() {
   this.teacher.selectedSubjects = [...this.teacher.subjects]; 
 }
@@ -24,10 +24,32 @@ saveChanges() {
     name: this.teacher.name,
     age: this.teacher.age,
     subjects: this.teacher.selectedSubjects,
-    numHours: this.teacher.numHours  
+    numHours: this.teacher.numHours ,
+    image:this.teacher.image
   };
+  if (this.imageFile) {
+    this.convertImageToBase64(this.imageFile).then((base64Image) => {
+      teacherData.image = base64Image;
+      this.saveTeacher.emit(teacherData);
+      
+    }).catch((error) => {
+      console.error('Error converting image to Base64', error);
+    });
+  } else {
 
-  this.saveTeacher.emit(teacherData);
+    this.saveTeacher.emit(teacherData);
+  }
+}
+onFileSelected(event:any){
+  this.imageFile=event.target.files[0];
+}
+convertImageToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string); 
+    reader.onerror = reject; 
+    reader.readAsDataURL(file); 
+  });
 }
 
 }

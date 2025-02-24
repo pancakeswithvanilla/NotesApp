@@ -37,20 +37,32 @@ def subject_list(request):
     serializer = SubjectSerializer(subjects, many = True)
     return Response(serializer.data)
 
+def handle_image(data):
+    """Handles Base64 images or keeps existing file paths unchanged."""
+    if 'image' in data and data['image']:
+        image_data = data['image']
+        if image_data.startswith("/media/"):
+            data.pop("image")  
+            return data
+
+        try:
+            format, imgstr = image_data.split(';base64,')
+            ext = format.split('/')[-1]  
+            image = ContentFile(base64.b64decode(imgstr), name=f'{uuid.uuid4()}.{ext}')
+            data['image'] = image  
+
+        except ValueError:
+            print("Invalid image format received, skipping conversion.")
+
+    return data
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_teacher(request):
-    print("cat")
     data = request.data.copy()  
     data['user'] = request.user.id
-    if 'image' in data and data['image']:
-        image_data = data['image']
-        format, imgstr = image_data.split(';base64,')
-        ext = format.split('/')[-1]  
-        image = ContentFile(base64.b64decode(imgstr), name=f'{uuid.uuid4()}.{ext}')
-        data['image'] = image
-
+    data = handle_image(data)
     serializer = TeacherSerializer(data=data)
     if serializer.is_valid():
         teacher = serializer.save(user=request.user)
@@ -94,11 +106,14 @@ def delete_teacher(request, teacher_id):
 def edit_teacher(request, teacher_id):
     """Edit a teacher only if it belongs to the logged-in user."""
     teacher = get_object_or_404(Teacher, id=teacher_id, user=request.user)
-    
-    serializer = TeacherSerializer(teacher, data=request.data, partial=True)  # Allows partial updates
+    data = request.data.copy()  
+    data = handle_image(data)
+    serializer = TeacherSerializer(teacher, data=data, partial=True)  
     if serializer.is_valid():
+        print("meow")
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+    print("Serializer errors", serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['POST'])

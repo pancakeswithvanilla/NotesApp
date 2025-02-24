@@ -6,6 +6,7 @@
     <option *ngFor="let subject of subjects" [value]="subject.id" >{{subject.subjectName}}</option>
   </select><br></p>
   <label>Available hours: <input type="number" [(ngModel)]="teacher.numHours" name="numHours" required></label><br>
+  <label >Image: <input type="file" (change)="onFileSelected($event)" ></label>
   <button type="submit">Save</button>
   <button type = "button" (click)="closeEditor.emit()" >Cancel</button>
 </form>

@@ -6,6 +6,7 @@
   (closeEditor)="closeEditor()" 
   (saveTeacher)="updateTeacher($event)">
 </app-edit-teacher>
+
 <div class="create-wrapper">
   <app-create-teacher (teacherCreated)="onTeacherCreated()" [subjects]="subjects"></app-create-teacher>
   <app-create-subject (subjectCreated)="onSubjectCreated()" [title] ="'Add New Subject'"></app-create-subject>
